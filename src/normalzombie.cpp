@@ -5,8 +5,9 @@ normalZombie::normalZombie(int path_num1)
     hp = 500;
     hurt = 10;
     state = 1;
-    speed = 10.0;
+    speed = 5.0;
     path_num = path_num1;
+    zombie_type = 0;//陆地
     nextpos_x = start_points[path_num1]->nextpoint->pos.x();
     nextpos_y = start_points[path_num1]->nextpoint->pos.y();
 }

@@ -1,14 +1,15 @@
-#ifndef CAIWEN_H
-#define CAIWEN_H
+#ifndef BLOVER_H
+#define BLOVER_H
 #include"plant.h"
 #include"zombie.h"
-class CaiWen:public Plant
+//可以打地面也可以打飞行
+class Blover:public Plant
 {
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-    CaiWen();
-    ~CaiWen()override;
+    Blover();
+    ~Blover()override;
     void advance(int phase) override;
 };
-#endif // CAIWEN_H
+#endif // BLOVER_H

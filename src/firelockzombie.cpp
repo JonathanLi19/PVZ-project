@@ -1,25 +1,27 @@
-#include"zombie.h"
-#include"plant.h"
+#include"firelockzombie.h"
 #include"Pathpoint.h"
-#include<QDebug>
-Zombie::Zombie()
+firelockzombie::firelockzombie(int path_num1)
 {
-    hp = 0;
-    hurt = 0;
-    speed = 0.0;
+    hp = 500;
+    hurt = 500;
     state = 1;
-    path_num = 0;
-    nextpos_x=0;
-    nextpos_y = 0;
+    speed = 1.0;
+    path_num = path_num1;
+    zombie_type = 1;//飞行
+    nextpos_x = start_points[path_num1]->nextpoint->pos.x();
+    nextpos_y = start_points[path_num1]->nextpoint->pos.y();
 }
-Zombie::~Zombie()
-{}
-bool Zombie::collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode) const
+void firelockzombie::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(mode)
-    return other->type() == Plant::Type && qAbs(other->y() - y()) < 30 && qAbs(other->x() - x()) < 30;
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+    painter->drawImage(QRectF(-70, -100, 140, 140),QImage("D:/QtProjects/images/firelockzombie.png"));
 }
-void Zombie::advance(int phase)
+QRectF firelockzombie::boundingRect() const
+{
+    return QRectF(-70, -100, 140, 140);
+}
+void firelockzombie::advance(int phase)
 {
     if(!phase)
         return;
@@ -27,11 +29,10 @@ void Zombie::advance(int phase)
     {
         if(MAP_NUM == "默认地图")
         {
-            //qDebug()<<nextpos_x<<nextpos_y<<x()<<y();
-            if(qAbs(x() -nextpos_x)< 5 && qAbs(y() -nextpos_y)< 5)//如果到了下一个节点
+            if(qAbs(x() - 150 -nextpos_x)< 5 && qAbs(y() -nextpos_y)< 5)//如果到了下一个节点
             {
                 Pathpoint* point = start_points[path_num];
-                while(!(qAbs(point->pos.x() - x()) < 5 && qAbs(point->pos.y() - y()) < 5))
+                while(!(qAbs(point->pos.x() - x() + 150) < 5 && qAbs(point->pos.y() - y()) < 5))
                 {
                     point = point->nextpoint;
                 }
@@ -47,7 +48,7 @@ void Zombie::advance(int phase)
                     return;
                 }
             }
-            int width = nextpos_x - x();
+            int width = nextpos_x - x() + 150;
             int height = nextpos_y - y();
             if(qAbs(width) < 5)
             {
@@ -63,7 +64,6 @@ void Zombie::advance(int phase)
         }
         else
         {
-            //qDebug()<<nextpos_x<<nextpos_y;
             if(qAbs(x() -nextpos_x)<= 5 && qAbs(y() -nextpos_y)<= 5)//如果到了下一个节点
             {
                 //qDebug()<<nextpos_x<<nextpos_y;
@@ -101,10 +101,10 @@ void Zombie::advance(int phase)
             }
           }
     }
-    /*if(x()<150 && MAP_NUM == "默认地图")
-        game_end_signal = 1;*/
-    if(x()<0)
-        game_end_signal = 1;
+/*if(x()<150 && MAP_NUM == "默认地图")
+    game_end_signal = 1;*/
+if(x()<0)
+    game_end_signal = 1;
     //如果碰撞，那么就把state变成攻击,并且attack
     QList<QGraphicsItem *>  list = collidingItems();
     if(list.size()==0 && state == 2)
@@ -112,25 +112,25 @@ void Zombie::advance(int phase)
         state = 1;
         return;
     }
-    //qDebug()<<list;
     foreach(QGraphicsItem * item, list)//只攻击一个植物
     {
         if(item->type() == Plant::Type)//如果是植物
         {
+            //state = 2;
             Plant* plant = qgraphicsitem_cast<Plant*>(item);
-            if(plant->hold_back > plant->cur_hold)//攻击当前可以阻拦僵尸的植物
+            plant->hp -= hurt;
+            if(plant->hp <= 0)
             {
-                plant->cur_hold++;
-                state = 2;//改成攻击模式
-                plant->hp -= hurt;
-                if(plant->hp <= 0)
-                {
-                    plant->~Plant();
-                    state = 1;//植物死去后继续恢复走路模式
-                }
-                break;
+                plant->~Plant();
             }
+            break;
         }
     }
 }
-
+bool firelockzombie::collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode) const
+{
+    Q_UNUSED(mode)
+    return other->type() == Plant::Type && qAbs(other->y() - y()) < 30 && qAbs(other->x() - x()) < 30;//攻击范围是一个正方形，边长是300
+}
+firelockzombie::~firelockzombie()
+{}

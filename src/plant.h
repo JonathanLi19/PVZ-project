@@ -11,10 +11,13 @@ public:
     int hurt;
     int cost;
     int state;//攻击还是静止
+    int plant_type;//近战0还是远战1
+    int hold_back;//阻拦数
+    int cur_hold;//当前栏了几个
+    QString name;//植物名字
     void attack();
     Plant();
     ~Plant()override;
-    void advance(int phase) override;
     enum{Type = UserType + 1};
     int type() const override
     {
@@ -22,5 +25,6 @@ public:
         return Type;
     }
     bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const override;
+    void advance(int phase) override;
 };
 #endif // PLANT_H

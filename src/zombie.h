@@ -13,7 +13,7 @@ public:
     int path_num;
     int nextpos_x;//下一个节点的坐标
     int nextpos_y;
-    void advance(int phase) override;
+    int zombie_type;//陆地还是飞行
     Zombie();
     ~Zombie()override;
     enum{Type = UserType + 2};
@@ -23,6 +23,8 @@ public:
         return Type;
     }
     bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const override;
+    void advance(int phase)override;
 };
 extern int game_end_signal;
+extern QString MAP_NUM;
 #endif // ZOMBIE_H

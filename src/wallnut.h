@@ -1,14 +1,13 @@
-#ifndef CAIWEN_H
-#define CAIWEN_H
+#ifndef WALLNUT_H
+#define WALLNUT_H
 #include"plant.h"
 #include"zombie.h"
-class CaiWen:public Plant
+class wallnut:public Plant
 {
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-    CaiWen();
-    ~CaiWen()override;
-    void advance(int phase) override;
+    wallnut();
+    ~wallnut()override;
 };
-#endif // CAIWEN_H
+#endif // WALLNUT_H

@@ -1,27 +1,26 @@
-#include"caiwen.h"
-QRectF CaiWen::boundingRect() const
+#include"spikeweed.h"
+QRectF Spikeweed::boundingRect() const
 {
-    return QRectF(-50, -50, 100, 100);
+    return QRectF(-70, 20, 140, 50);
 }
-void CaiWen::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Spikeweed::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-    painter->drawImage(QRectF(-50, -50, 100, 100),QImage("D:/QtProjects/images/Plants/Chomper/Chomper.gif"));
+    painter->drawImage(QRectF(-70, 20, 140, 50),QImage("D:/QtProjects/images/Plants/Spikeweed/Spikeweed.gif"));
 }
-CaiWen::CaiWen()
+Spikeweed::Spikeweed()
 {
-    hp = 20000;
-    hurt = 1;
-    cost = 50;
+    hp = 100;
+    hurt = 500;
+    cost = 150;
     state = 1;
     plant_type = 0;//近战
-    hold_back = 1;//一次阻拦1个僵尸
-    cur_hold = 0;
+    hold_back = 0;
 }
-CaiWen::~CaiWen()
+Spikeweed::~Spikeweed()
 {}
-void CaiWen::advance(int phase)
+void Spikeweed::advance(int phase)
 {
     if(!phase)
         return;
@@ -43,5 +42,4 @@ void CaiWen::advance(int phase)
             break;
         }
     }
-
 }

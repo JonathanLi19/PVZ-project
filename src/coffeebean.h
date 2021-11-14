@@ -1,14 +1,13 @@
-#ifndef CAIWEN_H
-#define CAIWEN_H
+#ifndef COFFEEBEAN_H
+#define COFFEEBEAN_H
 #include"plant.h"
 #include"zombie.h"
-class CaiWen:public Plant
+class CoffeeBean:public Plant
 {
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-    CaiWen();
-    ~CaiWen()override;
-    void advance(int phase) override;
+    CoffeeBean();
+    ~CoffeeBean()override;
 };
-#endif // CAIWEN_H
+#endif // COFFEEBEAN_H

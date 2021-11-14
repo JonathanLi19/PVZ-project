@@ -1,27 +1,27 @@
-#include"caiwen.h"
-QRectF CaiWen::boundingRect() const
+#include"blover.h"
+QRectF Blover::boundingRect() const
 {
     return QRectF(-50, -50, 100, 100);
 }
-void CaiWen::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Blover::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-    painter->drawImage(QRectF(-50, -50, 100, 100),QImage("D:/QtProjects/images/Plants/Chomper/Chomper.gif"));
+    painter->drawImage(QRectF(-50, -50, 100, 100),QImage("D:/QtProjects/images/Plants/Blover/Blover.gif"));
 }
-CaiWen::CaiWen()
+Blover::Blover()
 {
-    hp = 20000;
-    hurt = 1;
+    hp = 2000000;
+    hurt = 1000000;
     cost = 50;
     state = 1;
     plant_type = 0;//近战
     hold_back = 1;//一次阻拦1个僵尸
     cur_hold = 0;
 }
-CaiWen::~CaiWen()
+Blover::~Blover()
 {}
-void CaiWen::advance(int phase)
+void Blover::advance(int phase)
 {
     if(!phase)
         return;
@@ -32,9 +32,8 @@ void CaiWen::advance(int phase)
         {
             state = 2;//改成攻击模式
             Zombie* zombie = qgraphicsitem_cast<Zombie*>(item);
-            if(zombie->zombie_type == 1)//无法攻击飞行僵尸
-                return;
             zombie->hp -= hurt;
+            //qDebug()<<zombie->hp;
             if(zombie->hp <= 0)
             {
                 zombie->~Zombie();
