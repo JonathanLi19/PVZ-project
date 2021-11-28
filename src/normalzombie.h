@@ -10,6 +10,6 @@ public:
     normalZombie(int path_num);
     ~normalZombie()override;
     QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    void advance(int phase)override;
 };
 #endif // NORMALZOMBIE_H

@@ -53,8 +53,6 @@ public:
     void paint_grid_2(int x,int y);//给远战格子上色
     void paint_grid_fly(int pre_x,int pre_y,int x,int y);//给飞行路径的近战格子上色
     //所有近战格子分布在路径之上（不管是哪种路径）
-    void coffeebean_act();//增加土豆
-    bool could_place_potato(int x,int y);//这个坐标是否可被放置土豆
 public slots:
     void addZombie();
     void check();

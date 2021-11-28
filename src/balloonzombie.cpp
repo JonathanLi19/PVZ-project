@@ -3,19 +3,16 @@
 balloonzombie::balloonzombie(int path_num1)
 {
     hp = 200;
+    total_hp = 200;
     hurt = 10;
     state = 1;
     speed = 1.0;
     path_num = path_num1;
     zombie_type = 1;//飞行
+    target = nullptr;
     nextpos_x = start_points[path_num1]->nextpoint->pos.x();
     nextpos_y = start_points[path_num1]->nextpoint->pos.y();
-}
-void balloonzombie::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-    painter->drawImage(QRectF(-70, -100, 140, 140),QImage("D:/QtProjects/images/balloonzombie.png"));
+    setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie1/Walk1.gif");
 }
 QRectF balloonzombie::boundingRect() const
 {
@@ -25,6 +22,18 @@ void balloonzombie::advance(int phase)
 {
     if(!phase)
         return;
+    update();
+    if (hp <= 0)
+    {
+        if (state != 0)
+        {
+            state = 0;
+            setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie1/Die.gif");
+        }
+        else if (movie->currentFrameNumber() == movie->frameCount() - 1)
+            delete this;
+        return;
+    }
     if(state == 1)//如果在走路的话
     {
         if(MAP_NUM == "默认地图")
@@ -110,26 +119,47 @@ if(x()<0)
     if(list.size()==0 && state == 2)
     {
         state = 1;
+        setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie1/Walk1.gif");
         return;
     }
     foreach(QGraphicsItem * item, list)//只攻击一个植物
     {
-        if(item->type() == Plant::Type)//如果是植物
-        {
-            Plant* plant = qgraphicsitem_cast<Plant*>(item);
-            if(plant->hold_back >plant->cur_hold)//攻击当前可以阻拦僵尸的植物
+            if(item->type() == Plant::Type)//如果是植物
             {
-                plant->cur_hold++;
-                state = 2;//改成攻击模式
-                plant->hp -= hurt;
-                if(plant->hp <= 0)
+                Plant* plant = qgraphicsitem_cast<Plant*>(item);
+                if(plant->hold_back > plant->zombies.size())//攻击当前可以阻拦僵尸的植物
                 {
-                    plant->~Plant();
-                    state = 1;//植物死去后继续恢复走路模式
+                    if(state == 1)
+                    {
+                        state = 2;//改成攻击模式
+                        setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie1/Attack.gif");
+                        movie->setSpeed(50);
+                    }
+                    target = plant;
+                    bool attacking = false;
+                    for(int i=0;i<plant->zombies.size();i++)
+                    {
+                        if(plant->zombies[i] == this)
+                        {
+                            attacking = true;
+                            break;
+                        }
+                    }
+                    if(!attacking)
+                    {
+                        plant->zombies.push_back(this);
+                    }
+                    plant->hp -= hurt;
+                    if(plant->hp <= 0)
+                    {
+                        plant->~Plant();
+                        target = nullptr;
+                        state = 1;//植物死去后继续恢复走路模式
+                        setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie1/Walk1.gif");
+                    }
+                    break;
                 }
-                break;
             }
-        }
     }
 }
 bool balloonzombie::collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode) const

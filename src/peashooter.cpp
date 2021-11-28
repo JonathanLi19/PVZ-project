@@ -3,26 +3,22 @@
 #include<QGraphicsScene>
 #include<QDebug>
 extern QGraphicsScene* scene2;
-const int attack_time = 100;
 QRectF PeaShooter::boundingRect() const
 {
-    return QRectF(-50, -50, 100, 100);
-}
-void PeaShooter::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-    painter->drawImage(QRectF(-50, -50, 100, 100),QImage("D:/QtProjects/images/Plants/Peashooter/Peashooter.gif"));
+    return QRectF(-50, -80, 120, 120);
 }
 PeaShooter::PeaShooter()
 {
     hp = 100;
+    total_hp = 100;
     hurt = 100;
     cost = 100;
     state = 1;
     plant_type = 1;//远战
-    hold_back = 0;
+    hold_back = 1000000;
     counter = 0;
+    attack_time = 100;
+    setMovie("D:/QtProjects/images/Plants/Peashooter/Peashooter.gif");
 }
 PeaShooter::~PeaShooter()
 {}
@@ -30,6 +26,7 @@ void PeaShooter::advance(int phase)
 {
     if(!phase)
         return;
+    update();
     counter++;
     if(counter>=attack_time)
     {

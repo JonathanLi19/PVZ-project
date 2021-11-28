@@ -27,7 +27,17 @@ void Pea::advance(int phase)
            zombie->hp -= atk;
            if(zombie->hp <= 0)
            {
-               zombie->~Zombie();
+               if(zombie->target != nullptr)
+               {
+                   for(int i=0;i<zombie->target->zombies.size();i++)
+                   {
+                       if(zombie->target->zombies[i] == zombie)
+                       {
+                           zombie->target->zombies.erase(zombie->target->zombies.begin()+i);
+                           break;
+                       }
+                   }
+               }
            }
            delete this;
            return;

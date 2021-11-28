@@ -10,8 +10,11 @@ class boxzombie:public Zombie
 public:
     boxzombie(int path_num);
     QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void advance(int phase) override;
     bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const override;
+    int counter;
+    int attack_time;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    ~boxzombie()override;
 };
 #endif // BOXZOMBIE_H

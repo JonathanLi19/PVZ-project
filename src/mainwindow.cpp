@@ -245,7 +245,6 @@ void MainWindow::check()
     QGraphicsTextItem *txtitem = new QGraphicsTextItem(cur_src);
     txtitem->setPos(450,75);
     scene2->addItem(txtitem);
-    coffeebean_act();
 }
 void MainWindow::addZombie()
 {
@@ -258,7 +257,7 @@ void MainWindow::addZombie()
         {
             int i = qrand() % start_points.size();
             int q = qrand() % 5;//目前僵尸种类
-            qDebug()<<q;
+            q=1;
                 if(q==0)
                 {
                     while(true)
@@ -660,88 +659,4 @@ void MainWindow::paint_grid_fly(int pre_x, int pre_y, int x, int y)
             }
         }
     }
-}
-void MainWindow::coffeebean_act()
-{
-    //要加坚果需要满足：那格子在规定范围，那个格子是近战的，那个格子上没有植物
-    QTransform transform;
-    static int counter = 0;
-    counter++;
-    if(counter>=100)//默认时间间隔为100
-    {
-        QList<QGraphicsItem*>list = scene2->items();
-        foreach(QGraphicsItem* item1, list)
-        {
-            if(item1->type()==Plant::Type)
-            {
-                Plant* item = qgraphicsitem_cast<Plant*>(item1);
-                if(item->name == "coffeebean")
-                {
-                    int i1[3] = {-1,0,1};
-                    int j1[3] = {-1,0,1};
-                    int x;int y;
-                    int i = 0;int j = 0;
-                    for(int k=0;k<3;k++)
-                    {
-                        i = i1[k];
-                        for(int z=0;z<3;z++)
-                        {
-                            j = j1[z];
-                            x = item->x()+i*width1;y = item->y()+j*height1;
-                            if(could_place_potato(x,y))
-                                break;
-                        }
-                        if(could_place_potato(x,y))
-                            break;
-                    }
-                    bool flag = could_place_potato(x,y);
-                    if(flag == true)
-                    {
-                        Plant* plant = new wallnut;
-                        plant->setPos(x,y);
-                        scene2->addItem(plant);
-                    }
-                }
-            }
-        }
-        counter = 0;
-    }
-}
-bool MainWindow::could_place_potato(int x,int y)
-{
-    QTransform transform;
-    bool flag = true;//是否满足加坚果的条件
-
-        int i=0;int j=0;
-        for(;i<COL;i++)
-        {
-            if(x>=start_x+width1*i && x<start_x+width1*(i+1))
-            {
-                x = start_x+width1*i+width1/2;
-                break;
-            }
-        }
-        for(;j<ROW;j++)
-        {
-            if(y>=start_y+j*height1 && y<start_y+height1*(j+1))
-            {
-                y = start_y+j*height1+height1/2;
-                break;
-            }
-        }
-        if(i==9 || j==5)
-            flag = false;
-            int k=0;
-            for(;k<jinzhan.size();k++)
-            {
-                if(j==jinzhan[k].first && i == jinzhan[k].second)
-                {
-                    break;
-                }
-            }
-            if(k==jinzhan.size())
-                flag = false;
-            if(!(scene2->itemAt(x,y,transform)==NULL || scene2->itemAt(x,y,transform)->type() != Plant::Type))
-                flag = false;
-            return flag;
 }

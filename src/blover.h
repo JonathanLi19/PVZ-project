@@ -7,7 +7,7 @@ class Blover:public Plant
 {
 public:
     QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     Blover();
     ~Blover()override;
     void advance(int phase) override;

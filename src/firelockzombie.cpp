@@ -3,19 +3,16 @@
 firelockzombie::firelockzombie(int path_num1)
 {
     hp = 500;
+    total_hp = 500;
     hurt = 500;
     state = 1;
     speed = 1.0;
     path_num = path_num1;
     zombie_type = 1;//飞行
+    target = nullptr;
     nextpos_x = start_points[path_num1]->nextpoint->pos.x();
     nextpos_y = start_points[path_num1]->nextpoint->pos.y();
-}
-void firelockzombie::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-    painter->drawImage(QRectF(-70, -100, 140, 140),QImage("D:/QtProjects/images/firelockzombie.png"));
+    setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie2/Walk1.gif");
 }
 QRectF firelockzombie::boundingRect() const
 {
@@ -25,6 +22,18 @@ void firelockzombie::advance(int phase)
 {
     if(!phase)
         return;
+    update();
+    if (hp <= 0)
+    {
+        if (state != 0)
+        {
+            state = 0;
+            setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie1/Die.gif");
+        }
+        else if (movie->currentFrameNumber() == movie->frameCount() - 1)
+            delete this;
+        return;
+    }
     if(state == 1)//如果在走路的话
     {
         if(MAP_NUM == "默认地图")
@@ -110,6 +119,7 @@ if(x()<0)
     if(list.size()==0 && state == 2)
     {
         state = 1;
+        setMovie("D:/QtProjects/images/Zombies/DuckyTubeZombie2/Walk1.gif");
         return;
     }
     foreach(QGraphicsItem * item, list)//只攻击一个植物
@@ -118,12 +128,30 @@ if(x()<0)
         {
             //state = 2;
             Plant* plant = qgraphicsitem_cast<Plant*>(item);
-            plant->hp -= hurt;
-            if(plant->hp <= 0)
+            if(plant->hold_back > plant->zombies.size())
             {
-                plant->~Plant();
+                target = plant;
+                bool attacking = false;
+                for(int i=0;i<plant->zombies.size();i++)
+                {
+                    if(plant->zombies[i] == this)
+                    {
+                        attacking = true;
+                        break;
+                    }
+                }
+                if(!attacking)
+                {
+                    plant->zombies.push_back(this);
+                }
+                plant->hp -= hurt;
+                if(plant->hp <= 0)
+                {
+                    plant->~Plant();
+                    target = nullptr;
+                }
+                break;
             }
-            break;
         }
     }
 }
