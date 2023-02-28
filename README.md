@@ -1,7 +1,2 @@
-# project1-quanhaoli
-yeah!
-Commit demonstration
-=======
-# project2-quanhaoli
-project2-quanhaoli created by GitHub Classroom
-yeah!
+# 代码说明
+This is a Plants vs. Zombies Game with graphical interface, mainly based on Qt to develop GUI.
